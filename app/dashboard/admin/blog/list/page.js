@@ -2,12 +2,9 @@
 import Link from "next/link";
 import BlogList from "@/components/blogs/BlogList";
 
-
-
 async function getBlogs(searchParams) {
   const urlParams = {page: searchParams.page || 1};
   const searchQuery = new URLSearchParams(urlParams).toString();
-  
 
   const response = await fetch(`${process.env.API}/blog?${searchQuery}`, {
     method: "GET",
@@ -25,7 +22,7 @@ async function getBlogs(searchParams) {
   return data;
 }
 
-export default  async function Home({searchParams}) {
+export default async function AdminBlogsList({searchParams}) {
   const data = await getBlogs(searchParams);
   const {blogs, currentPage, totalPages} = data;
 
@@ -36,7 +33,13 @@ export default  async function Home({searchParams}) {
   <div className='container'>
     <p className="lead text-primary text-center">Latest Blogs</p>
 
-    <BlogList blogs={blogs} />
+    {/* <BlogList blogs={blogs} /> */}
+    {blogs.map((blog) => (
+        <div key={blog._id} className="d-flex justify-content-between">
+            <p>{blog.title}</p>
+            <Link className="text-danger" href={`/dashboard/admin/blog/update/${blog.slug}`}>Update</Link>
+        </div>
+    ))}
 
     <div className="d-flex justify-content-center">
       <nav aria-label="Page navigation">
@@ -48,14 +51,6 @@ export default  async function Home({searchParams}) {
             </li>
           )}
 
-          {Array.from({length: totalPages}, (_, i) => {
-            const page = i + 1;
-            return (
-              <li key={page} className={`page-item ${currentPage === page ? "active" : ""}`}>
-                <Link className="page-link" href={`?page=${page}`}>{page}</Link>
-              </li>
-            )
-          })}
 
           {hasNextPage && (
             <li className="page-item">
