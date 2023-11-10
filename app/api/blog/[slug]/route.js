@@ -4,7 +4,6 @@ import Blog from "@/models/blog";
 
 
 
-
 export async function GET(req, context) {
     await dbConnect();
     try {

@@ -1,6 +1,7 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
+
 //export { default } from "next-auth/middleware";
 export const config = {matcher: ["/dashboard/:path*","/api/user/:path*", "/api/admin/:path*",]};
 
@@ -10,7 +11,7 @@ export default withAuth(
         const url = req.nextUrl.pathname;
         const userRole = req?.nextauth?.token?.user?.role;
         
-
+    
         //cors   
         if(url?.includes("/api")) {
             NextResponse.next().headers.append("Access-Control-Allow-Origin", "*");

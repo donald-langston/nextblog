@@ -16,7 +16,6 @@ export async function GET(req, context) {
     try {
         const currentPage = Number(page) || 1;
         const skip = (currentPage - 1) * pageSize;
-        const totalBlogs = await Blog.countDocuments({});
         const blogs = await Blog.find()
         .where('postedBy')
         .equals(new mongoose.Types.ObjectId("" + id))
@@ -24,6 +23,7 @@ export async function GET(req, context) {
         .limit(pageSize)
         .skip(skip)
         .sort({createdAt: -1});
+        const totalBlogs = blogs.length;
 
         return NextResponse.json({blogs, currentPage, totalPages: Math.ceil(totalBlogs / pageSize)}, {status: 200});
     } catch(err) {
